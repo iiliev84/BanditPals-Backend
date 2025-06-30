@@ -1,8 +1,13 @@
 import express from "express";
 const app = express();
 export default app;
+import cors from "cors";
+import usersRouter from "#api/users";
 
+app.use(cors());
 app.use(express.json())
+
+app.use("/users", usersRouter);
 
 app.route('/').get((req,res)=>{
     res.send("Welcome to the Bandit Pals videogame.")
