@@ -3,11 +3,14 @@ const app = express();
 export default app;
 import cors from "cors";
 import usersRouter from "#api/users";
+import scoreRouter from "#api/score";
 
 app.use(cors());
 app.use(express.json())
 
 app.use("/users", usersRouter);
+
+app.use("/score", scoreRouter);
 
 app.route('/').get((req,res)=>{
     res.send("Welcome to the Bandit Pals videogame.")
