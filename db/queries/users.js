@@ -8,7 +8,7 @@ export async function createUser({username, password}) {
     RETURNING *
     `;
     const hashedPassword = await bcrypt.hash(password, 5);
-    const {rows: [user]} = await db.query(sql, [username, hashedPassword]);
+    const {rows: [user],} = await db.query(sql, [username, hashedPassword]);
     return user;
 }
 
