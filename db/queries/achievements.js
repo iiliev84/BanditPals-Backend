@@ -12,6 +12,30 @@ export async function createAchievement({name, description}){
 };
 
 //getAllAchievements -> for user to see all avaiable achievements
+export async function getAllAchievements(){
+    const sql = `
+        SELECT * FROM achievements;`;
+    const {rows: allAchievements} = await db.query(sql);
+    return allAchievements;
+};
 
 
 //getUserAchievements -> for user to see all achievements they have unlocked
+export async function getUserAchievements(user_id){
+    const sql = `
+        SELECT * FROM user_achievements WHERE user_id = $1;
+    `;
+    const {rows: userAchievements} = await db.query(sql, [user_id]);
+    return userAchievements;
+};
+
+
+
+//POST user achievements
+export async function postUserAchievement ({user_id, achievement_id, unlocked_at}){
+    const sql = `
+        INSERT INTO user_achievements (user_id, achievement_id, unlocked_at) VALUES ($1, $2, $3) RETURNING *;
+    `;
+    const {rows: userAchievements} = await db.query(sql,[user_id, achievement_id, unlocked_at]);
+    return userAchievements;
+};
