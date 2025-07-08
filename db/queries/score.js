@@ -18,16 +18,6 @@ export async function getHighestScore(id){ // working
   return highScore[0];
   };
 
-export async function postNewScore(){ 
-    const sql = `
-        INSERT INTO score (user_id, score, created_at)
-        VALUES ($1, $2, $3)
-        RETURNING *:
-    `;
-    const {rows: newScore} = await db.query(sql, [user_id, score, created_at]);
-    return newScore[0];
-};
-
 export async function updateHighestScore({score, created_at, id}){ // working
     const sql = `
         UPDATE score 

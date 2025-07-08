@@ -19,7 +19,7 @@ CREATE TABLE score(
 
 CREATE TABLE achievements(
     id SERIAL PRIMARY KEY, 
-    name VARCHAR(255) NOT NULL;
+    name VARCHAR(255) NOT NULL,
     dscription TEXT
 );
 
