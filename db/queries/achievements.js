@@ -11,6 +11,7 @@ export async function createAchievement({name, description}){
     return newAchievements;
 };
 
+
 //getAllAchievements -> for user to see all avaiable achievements
 export async function getAllAchievements(){
     const sql = `
@@ -34,7 +35,7 @@ export async function getUserAchievements(user_id){
 //POST user achievements
 export async function postUserAchievement ({user_id, achievement_id, unlocked_at}){
     const sql = `
-        INSERT INTO user_achievements (user_id, achievement_id, unlocked_at) VALUES ($1, $2, $3) RETURNING *;
+        INSERT IGNORE INTO user_achievements (user_id, achievement_id, unlocked_at) VALUES ($1, $2, $3) RETURNING *;
     `;
     const {rows: userAchievements} = await db.query(sql,[user_id, achievement_id, unlocked_at]);
     return userAchievements;
