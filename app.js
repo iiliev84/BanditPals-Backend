@@ -15,6 +15,8 @@ app.use("/score", scoreRouter);
 
 app.use("/achievements", achievementsRouter);
 
+app.use("/users", usersRouter);
+
 app.route('/').get((req,res)=>{
     res.send("Welcome to the Bandit Pals videogame.")
 })

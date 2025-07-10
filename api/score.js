@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 export default router;
 import db from "#db/client";
+import { verifyToken } from "#middleware";
 import { getHighestScore, createScore, updateHighestScore, getScores } from "#db/queries/score";
 
 router.route("/:id").get(async(req,res,next)=>{
@@ -15,19 +16,19 @@ router.route("/:id").get(async(req,res,next)=>{
 });
 
 
-router.route("/:id").post(async(req,res,next)=>{
-    const id = Number(req.params.id);
-    const {user_id, score, created_at} = req.body;
+router.route("/").post(verifyToken, async(req,res,next)=>{
+    const id = req.user.id;
+    const {score} = req.body;
 
     if(!req.body){
         return res.status(400).send(`Missing req body.`)
     };
 
-    if (!user_id || !score || !created_at){
+    if (!id || !score){
         return res.status(400).send(`Missing required fields.`)
     };
 
-    const highScore = await createScore({user_id: id, score, created_at});
+    const highScore = await createScore({user_id: id, score});
     res.status(201).json(highScore);
 });
 

@@ -1,12 +1,12 @@
 import db from "#db/client";
 
-export async function createScore({user_id, score, created_at}){
+export async function createScore({user_id, score}){
     const sql = `
-        INSERT INTO score (user_id, score, created_at)
-        VALUES ($1, $2, $3)
+        INSERT INTO score (user_id, score)
+        VALUES ($1, $2)
         RETURNING *;
     `;
-    const {rows: scores} = await db.query(sql, [user_id, score, created_at]);
+    const {rows: scores} = await db.query(sql, [user_id, score]);
     return scores;
 };
 
@@ -31,8 +31,11 @@ export async function updateHighestScore({score, created_at, id}){
 
 export async function getScores(){
     const sql = `
-    SELECT *
+    SELECT score.*, 
+    users.username
     FROM score
+    JOIN users
+    ON score.user_id = users.id 
     `;
     const {rows: score} = await db.query(sql);
     return score;

@@ -12,7 +12,7 @@ CREATE TABLE users(
 CREATE TABLE score(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
-    score INTEGER NOT NULL,
+    score FLOAT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

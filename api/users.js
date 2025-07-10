@@ -37,8 +37,10 @@ router.post('/login', async(req,res,next) => {
     return res.status(400).send(`Missing username or password`);
   }
   try {
+    console.log(username,password)
     const result = await db.query(`SELECT * FROM users WHERE username = $1;`, [username]); 
     const realUserInfo = result.rows[0]
+    console.log(result)
     const isPWMatch = await bcrypt.compare(password, realUserInfo.password);
     if(!isPWMatch) return res.status(401).send('Not authorized');
     const token = jwt.sign({id: realUserInfo.id, username: realUserInfo.username},process.env.JWT_SECRET);
@@ -48,8 +50,18 @@ router.post('/login', async(req,res,next) => {
   }
 })
 
-router.route("/me").get(verifyToken, async(req,res,next)=>{
-const user = await getUserById(req.user.id)
-res.status(200).send(user)
 
-})
+router.route("/me").get(verifyToken, async (req, res) => {
+  try {
+    const user = await getUserById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
