@@ -23,10 +23,12 @@ export async function getUsers(){
 
 export async function getUserById(id) {
   const sql = `
-  SELECT *
-  FROM users
-  WHERE id = $1
+  SELECT users.*, 
+  score.*
+  FROM users JOIN score ON users.id = score.user_id
+  WHERE users.id = $1
+  
   `;
-  const {rows: [user],} = await db.query(sql, [id]);
+  const {rows: user,} = await db.query(sql, [id]);
   return user;
 }
