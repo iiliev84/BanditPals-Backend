@@ -35,7 +35,7 @@ export async function getUserAchievements(user_id){
 //POST user achievements
 export async function postUserAchievement ({user_id, achievement_id, unlocked_at}){
     const sql = `
-        INSERT IGNORE INTO user_achievements (user_id, achievement_id, unlocked_at) VALUES ($1, $2, $3) RETURNING *;
+        INSERT INTO user_achievements (user_id, achievement_id, unlocked_at) VALUES ($1, $2, $3) RETURNING *;
     `;
     const {rows: userAchievements} = await db.query(sql,[user_id, achievement_id, unlocked_at]);
     return userAchievements;
