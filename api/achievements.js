@@ -3,6 +3,7 @@ const router = express.Router();
 export default router;
 import db from "#db/client";
 import { createAchievement, getAllAchievements, getUserAchievements, postUserAchievement } from "#db/queries/achievements";
+import { verifyToken } from "#middleware";
 
 
 //GET route for all achievments
@@ -28,18 +29,21 @@ router.route("/:id").get(async(req, res, next)=>{
 });
 
 //POST user achievements
-router.route("/:id").post(async(req,res, next)=>{
-    const id = Number(req.params.id);
-    const {user_id, achievement_id, unlocked_at} = req.body;
+router.route("/").post(verifyToken, async(req,res, next)=>{
+    const id = req.user.id;
+    if (!id){
+        return res.status(401).send(`User not authorized`)
+    }
+    const {achievement_id} = req.body;
 
     if (!req.body){
         return res.status(400).send(`Missing req body`)
     };
 
-    if (!user_id || !achievement_id || !unlocked_at){
+    if (!id || !achievement_id){
         return req.status(400).send(`Missing required fields.`)
     };
 
-    const newUserAchievement = await postUserAchievement({user_id, achievement_id, unlocked_at});
+    const newUserAchievement = await postUserAchievement({user_id: id, achievement_id});
     res.status(201).json(newUserAchievement);
 });
