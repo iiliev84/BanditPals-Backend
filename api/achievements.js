@@ -13,7 +13,7 @@ router.route("/").get(async(req, res)=>{
 });
 
 //GET route for user earned achievements
-router.route("/:id").get(async(req, res, next)=>{
+router.route("/").get(async(req, res, next)=>{
     const id = Number(req.params.id);
     const userAchievements = await getUserAchievements(id);
 
