@@ -13,8 +13,8 @@ router.route("/").get(async(req, res)=>{
 });
 
 //GET route for user earned achievements
-router.route("/").get(async(req, res, next)=>{
-    const id = Number(req.params.id);
+router.route("/user").get(verifyToken, async(req, res, next)=>{
+    const id = req.user.id;
     const userAchievements = await getUserAchievements(id);
 
     if (!userAchievements){
